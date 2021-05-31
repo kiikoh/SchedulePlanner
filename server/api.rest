@@ -1,0 +1,41 @@
+# To use this file install REST Client extension for VSCode
+
+POST http://localhost:5000/api/register
+content-type: application/json
+
+{
+    "email": "jd@gmail.com",
+    "name": "John Doe",
+    "password": "example123"
+}
+
+###
+
+POST http://localhost:5000/api/login
+content-type: application/json
+
+{
+    "email": "jd@gmail.com",
+    "password": "example123"
+}
+
+###
+
+POST http://localhost:5000/api/register
+content-type: application/json
+
+{
+    "email": "test@gmail.com",
+    "name": "Tester Guy",
+    "password": "123456"
+}
+
+###
+
+POST http://localhost:5000/api/login
+content-type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "123456"
+}
