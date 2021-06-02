@@ -1,9 +1,9 @@
 import "./App.css";
-import { Drawer, List, ListItem, ListItemText, Divider, ListItemIcon } from "@material-ui/core";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import { Menu, Inbox, Mail } from "@material-ui/icons";
 import { useState } from "react";
 import TopNav from "./Components/TopNav";
+import SideDrawer from "./Components/SideDrawer";
+import LoginPage from "./Pages/LoginPage";
 
 const theme = createMuiTheme({
 	palette: {
@@ -22,18 +22,8 @@ function App() {
 	return (
 		<ThemeProvider theme={theme}>
 			<TopNav open={open} setOpen={setOpen} />
-			<Drawer open={open} onClose={() => setOpen(false)}>
-				<div role="presentation" onClick={() => setOpen(false)} onKeyDown={() => setOpen(false)}>
-					<List>
-						<ListItem button>
-							<ListItemIcon>
-								<Mail />
-							</ListItemIcon>
-							<ListItemText primary={"View Schedules"} />
-						</ListItem>
-					</List>
-				</div>
-			</Drawer>
+			<SideDrawer open={open} setOpen={setOpen} />
+			<LoginPage></LoginPage>
 		</ThemeProvider>
 	);
 }
