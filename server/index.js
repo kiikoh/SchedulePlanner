@@ -1,7 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-require("dotenv").config();
 const app = express();
 const bcrypt = require("bcryptjs");
 const User = require("./models/User");
@@ -10,8 +10,9 @@ const jwt = require("jsonwebtoken");
 const connect = mongoose.connect(process.env.dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	useCreateIndex: true,
+	useCreateIndex: true
 });
+app.use(bodyParser.json());
 
 connect
 	.then((db) => {
@@ -19,7 +20,6 @@ connect
 	})
 	.catch((err) => console.log(err));
 
-app.use(bodyParser.json());
 
 app.post("/api/login", async (req, res) => {
 	const { email, password } = req.body;
