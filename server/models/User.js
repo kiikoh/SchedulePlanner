@@ -9,13 +9,23 @@ const UserSchema = new Schema(
 			required: true,
 		},
 		name: {
-			type: String,
-			required: true,
+			first: {
+				type: String,
+				required: true
+			},
+			last: {
+				type: String,
+				required: true
+			}
 		},
 		password: {
 			type: String,
 			required: true,
 		},
+		year: {
+			type: Number,
+			required: true
+		}
 	},
 	{
 		collection: "users",
