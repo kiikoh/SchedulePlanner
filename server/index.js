@@ -6,6 +6,7 @@ const app = express();
 const bcrypt = require("bcryptjs");
 const User = require("./models/User");
 const jwt = require("jsonwebtoken");
+var cors = require('cors');
 
 const connect = mongoose.connect(process.env.dbUrl, {
 	useNewUrlParser: true,
@@ -13,6 +14,7 @@ const connect = mongoose.connect(process.env.dbUrl, {
 	useCreateIndex: true
 });
 app.use(bodyParser.json());
+app.use(cors())
 
 connect
 	.then((db) => {
@@ -46,15 +48,15 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/register", async (req, res) => {
-	const { email, name, password: plainTextPassword } = req.body;
-
+	const { email, name, pass: plainTextPassword, year } = req.body;
+	console.log(req)
 	if (!email || typeof email !== "string") {
-		return res.json({ status: "error", error: "Invalid username" });
+		return res.json({ status: "error", error: "Invalid email" });
 	}
 
-	if (!name || typeof name !== "string") {
-		return res.json({ status: "error", error: "Invalid name" });
-	}
+	// if (!name || typeof name !== "string") {
+	// 	return res.json({ status: "error", error: "Invalid name" });
+	// }
 
 	if (!plainTextPassword || typeof plainTextPassword !== "string") {
 		return res.json({ status: "error", error: "Invalid password" });
@@ -74,6 +76,7 @@ app.post("/api/register", async (req, res) => {
 			email,
 			name,
 			password,
+			year
 		});
 		console.log("User created successfully: ", response);
 	} catch (error) {
