@@ -11,12 +11,12 @@ const UserSchema = new Schema(
 		name: {
 			first: {
 				type: String,
-				required: true
+				required: true,
 			},
 			last: {
 				type: String,
-				required: true
-			}
+				required: true,
+			},
 		},
 		password: {
 			type: String,
@@ -24,8 +24,8 @@ const UserSchema = new Schema(
 		},
 		year: {
 			type: Number,
-			required: true
-		}
+			required: true,
+		},
 	},
 	{
 		collection: "users",

@@ -6,22 +6,21 @@ const app = express();
 const bcrypt = require("bcryptjs");
 const User = require("./models/User");
 const jwt = require("jsonwebtoken");
-var cors = require('cors');
+var cors = require("cors");
 
 const connect = mongoose.connect(process.env.dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
-	useCreateIndex: true
+	useCreateIndex: true,
 });
 app.use(bodyParser.json());
-app.use(cors())
+app.use(cors());
 
 connect
 	.then((db) => {
 		console.log("Connected to the database.");
 	})
 	.catch((err) => console.log(err));
-
 
 app.post("/api/login", async (req, res) => {
 	const { email, password } = req.body;
@@ -49,7 +48,7 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/register", async (req, res) => {
 	const { email, name, pass: plainTextPassword, year } = req.body;
-	console.log(req)
+	console.log(req);
 	if (!email || typeof email !== "string") {
 		return res.json({ status: "error", error: "Invalid email" });
 	}
@@ -76,7 +75,7 @@ app.post("/api/register", async (req, res) => {
 			email,
 			name,
 			password,
-			year
+			year,
 		});
 		console.log("User created successfully: ", response);
 	} catch (error) {
