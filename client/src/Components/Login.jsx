@@ -1,4 +1,4 @@
-import { TextField, Typography } from "@material-ui/core";
+import { Button, Grid, TextField } from "@material-ui/core";
 import React, {useState} from "react";
 
 const Login = () => {
@@ -7,15 +7,17 @@ const Login = () => {
 	const [password, setPassword] = useState("");
 
 	return (
-		<form>
-			<Typography variant="h4">Login</Typography>
-			<div style={{ marginTop: 10 }}>
+		<Grid container spacing={2}>
+			<Grid item xs={12}>
 				<TextField required label="Email" variant="outlined" fullWidth onChange={e => setEmail(e.target.value)} value={email}/>
-			</div>
-			<div style={{ marginTop: 10 }}>
+			</Grid>
+			<Grid item xs={12}>
 				<TextField required label="Password" variant="outlined" type="password" fullWidth onChange={e => setPassword(e.target.value)} value={password}/>
-			</div>
-		</form>
+			</Grid>
+			<Grid item xs={12}>
+				<Button fullWidth variant="contained" color="primary">Sign Up</Button>
+			</Grid>
+		</Grid>
 	);
 };
 
