@@ -1,17 +1,6 @@
-import {
-	TextField,
-	Typography,
-	Select,
-	MenuItem,
-	InputLabel,
-	FormControl,
-	Button,
-	Input,
-	InputAdornment,
-	Grid,
-} from "@material-ui/core";
+import { TextField, Button, InputAdornment, Grid } from "@material-ui/core";
 import React, { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const Registration = () => {
 	const [first, setFirst] = useState("");
@@ -79,12 +68,6 @@ const Registration = () => {
 
 	return (
 		<Grid container spacing={2}>
-			<Toaster
-				position="top-center"
-				toastOptions={{
-					duration: 2000,
-				}}
-			/>
 			<Grid item xs={12} sm={6}>
 				<TextField
 					required
@@ -145,7 +128,6 @@ const Registration = () => {
 					error={year !== "" && !validateYear()}
 					required
 					variant="outlined"
-					type="password"
 					type="number"
 					InputProps={{ startAdornment: <InputAdornment position="start">Class of '</InputAdornment> }}
 					fullWidth
