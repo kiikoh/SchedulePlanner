@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const Registration = () => {
 	const [first, setFirst] = useState("");
 	const [last, setLast] = useState("");
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [pass, setPass] = useState("");
 	const [confirm, setConfirm] = useState("");
 	const [year, setYear] = useState("");
@@ -14,7 +14,7 @@ const Registration = () => {
 		if (!first) return false;
 		if (!last) return false;
 
-		if (!validateEmail()) return false;
+		if (!username) return false;
 		if (pass?.length < 5) return false;
 		if (confirm !== pass) return false;
 		if (!validateYear()) return false;
@@ -22,10 +22,9 @@ const Registration = () => {
 		return true;
 	};
 
-	const validateEmail = () => {
-		const re =
-			/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		return re.test(email);
+	const validateUsername = () => {
+		const re = /^([a-zA-Z0-9_-]){3,20}$/;
+		return username.match(re);
 	};
 
 	const validateYear = () => {
@@ -43,7 +42,7 @@ const Registration = () => {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				email,
+				username,
 				name: {
 					first,
 					last,
@@ -90,13 +89,13 @@ const Registration = () => {
 			</Grid>
 			<Grid item xs={12}>
 				<TextField
-					error={email !== "" && !validateEmail()}
+					error={username !== "" && !validateUsername()}
 					required
-					label="Email"
+					label="Username"
 					variant="outlined"
 					fullWidth
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
+					value={username}
+					onChange={(e) => setUsername(e.target.value)}
 				/>
 			</Grid>
 			<Grid item xs={12}>

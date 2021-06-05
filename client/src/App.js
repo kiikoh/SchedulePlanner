@@ -42,7 +42,7 @@ function App() {
 					<SideDrawer open={open} setOpen={setOpen} />
 					<Switch>
 						<Route path="/login" component={LoginPage} />
-						<PrivateRoute path="/schedule" component={SchedulePage} loginPath="/login" />{" "}
+						<PrivateRoute path="/schedule/:username" component={SchedulePage} loginPath="/login" />{" "}
 						<PrivateRoute path="/settings" component={SettingsPage} loginPath="/login" />
 					</Switch>
 				</Router>

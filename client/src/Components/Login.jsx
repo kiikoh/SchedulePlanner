@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode";
 import { useHistory } from "react-router-dom";
 
 const Login = () => {
-	const [email, setEmail] = useState("");
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const signIn = useSignIn();
 	const history = useHistory();
@@ -18,7 +18,7 @@ const Login = () => {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				email,
+				username,
 				password,
 			}),
 		})
@@ -48,11 +48,11 @@ const Login = () => {
 			<Grid item xs={12}>
 				<TextField
 					required
-					label="Email"
+					label="Username"
 					variant="outlined"
 					fullWidth
-					onChange={(e) => setEmail(e.target.value)}
-					value={email}
+					onChange={(e) => setUsername(e.target.value)}
+					value={username}
 				/>
 			</Grid>
 			<Grid item xs={12}>

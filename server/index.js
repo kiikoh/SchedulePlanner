@@ -1,41 +1,43 @@
 require("dotenv").config();
+
 const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const app = express();
-const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+
+const mongoose = require("mongoose");
 const User = require("./models/User");
+
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-var cors = require("cors");
+const authMiddleware = require("./auth");
 
 const connect = mongoose.connect(process.env.dbUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
 });
-app.use(bodyParser.json());
-app.use(cors());
 
-connect
-	.then((db) => {
-		console.log("Connected to the database.");
-	})
-	.catch((err) => console.log(err));
+app.use(express.json());
+app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
+app.use(cookieParser());
+
+connect.then((db) => console.log("Connected to the database.")).catch((err) => console.log(err));
 
 app.post("/api/login", async (req, res) => {
-	const { email, password } = req.body;
-	const user = await User.findOne({ email }).lean();
+	const { username, password } = req.body;
+	const user = await User.findOne({ username }).lean();
 
 	if (!user) {
 		return res.json({ status: "error", error: "Invalid username/password" });
 	}
 
 	if (await bcrypt.compare(password, user.password)) {
-		// the email, password combination is successful
+		// the username, password combination is successful
 		const token = jwt.sign(
 			{
 				id: user._id,
-				email: user.email,
+				username: user.username,
 				name: user.name,
 			},
 			process.env.JWT_SECRET,
@@ -50,9 +52,9 @@ app.post("/api/login", async (req, res) => {
 
 //TODO: More validation here
 app.post("/api/register", async (req, res) => {
-	const { email, name, pass: plainTextPassword, year } = req.body;
-	if (!email || typeof email !== "string") {
-		return res.json({ status: "error", error: "Invalid email" });
+	const { username, name, pass: plainTextPassword, year } = req.body;
+	if (!username || typeof username !== "string") {
+		return res.json({ status: "error", error: "Invalid username" });
 	}
 
 	if (!plainTextPassword || typeof plainTextPassword !== "string") {
@@ -62,7 +64,7 @@ app.post("/api/register", async (req, res) => {
 	if (plainTextPassword.length < 5) {
 		return res.json({
 			status: "error",
-			error: "Password too small. Should be atleast 6 characters",
+			error: "Password too small. Should be atleast 5 characters",
 		});
 	}
 
@@ -70,16 +72,18 @@ app.post("/api/register", async (req, res) => {
 
 	try {
 		const response = await User.create({
-			email,
+			username,
 			name,
 			password,
 			year,
+			classes: [],
+			access: [],
 		});
 		console.log("User created successfully: ", response);
 	} catch (error) {
 		if (error.code === 11000) {
 			// duplicate key
-			return res.json({ status: "error", error: "Email already in use" });
+			return res.json({ status: "error", error: "Username already in use" });
 		}
 		throw error;
 	}
@@ -87,13 +91,20 @@ app.post("/api/register", async (req, res) => {
 	res.json({ status: "OK" });
 });
 
-app.get("/api/schedule/:id", async (req, res) => {
-	//Check to make sure the user has access to this schedule
+app.get("/api/schedule/:username", authMiddleware, async (req, res) => {
+	const user = await User.findOne({ username: req.params.username }).lean();
 
-	//Pull the schedule and return it
+	//User not found
+	if (!user) res.status(404).json({ user: null, message: "Could not find user" });
 
-	const user = await User.findById(req.params.id).lean();
+	//Strip password field
+	delete user.password;
 
+	//User not given access
+	if (!user.access.includes(req.user.username) && req.user.username !== req.params.username)
+		res.status(403).json({ user: null, message: "User has not allowed access" });
+
+	//User sent back
 	res.json({ user });
 });
 
