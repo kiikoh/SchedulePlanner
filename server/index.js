@@ -36,8 +36,10 @@ app.post("/api/login", async (req, res) => {
 			{
 				id: user._id,
 				email: user.email,
+				name: user.name,
 			},
-			process.env.JWT_SECRET
+			process.env.JWT_SECRET,
+			{ expiresIn: "14d" }
 		);
 
 		return res.json({ status: "OK", data: token });
@@ -46,16 +48,12 @@ app.post("/api/login", async (req, res) => {
 	res.json({ status: "error", error: "Invalid username/password" });
 });
 
+//TODO: More validation here
 app.post("/api/register", async (req, res) => {
 	const { email, name, pass: plainTextPassword, year } = req.body;
-	console.log(req);
 	if (!email || typeof email !== "string") {
 		return res.json({ status: "error", error: "Invalid email" });
 	}
-
-	// if (!name || typeof name !== "string") {
-	// 	return res.json({ status: "error", error: "Invalid name" });
-	// }
 
 	if (!plainTextPassword || typeof plainTextPassword !== "string") {
 		return res.json({ status: "error", error: "Invalid password" });
@@ -87,6 +85,16 @@ app.post("/api/register", async (req, res) => {
 	}
 
 	res.json({ status: "OK" });
+});
+
+app.get("/api/schedule/:id", async (req, res) => {
+	//Check to make sure the user has access to this schedule
+
+	//Pull the schedule and return it
+
+	const user = await User.findById(req.params.id).lean();
+
+	res.json({ user });
 });
 
 app.listen(5000, () => {
